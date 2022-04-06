@@ -1,19 +1,17 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
+
+	"github.com/jonathanherber/golang_gin/models"
+	"github.com/jonathanherber/golang_gin/routes"
 )
 
-func ShowStudents(c *gin.Context) { //controller
-	//c *gin.Context is a convention
-	c.JSON(200, gin.H{ //H is a shortcut for map[string]interface{}
-		"id":   "1",
-		"name": "Jonathan",
-	})
-}
-
-func main() { //function that creates the server, specify the http verb, the route and the controllers to that route
-	server := gin.Default() //default configurations
-	server.GET("/students", ShowStudents)
-	server.Run(":8080") //default port
+func main() {
+	models.Students = []models.Student{
+		{Name: "Jonathan", CPF: "123456789", RG: "123123123"},
+		{Name: "Daniel", CPF: "987654321", RG: "321321321"},
+	}
+	routes.HandleRequests()
+	fmt.Println("Server starting...")
 }

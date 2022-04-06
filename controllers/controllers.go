@@ -9,7 +9,9 @@ import (
 )
 
 func ShowStudents(c *gin.Context) { //c *gin.Context is a convention
-	c.JSON(200, models.Students) //return the struct from the controller instantiated in the server.go file
+	var students []models.Student
+	database.DB.Find(&students) //find all students in the database
+	c.JSON(200, students)
 }
 
 func Greetings(c *gin.Context) {
@@ -19,12 +21,24 @@ func Greetings(c *gin.Context) {
 	})
 }
 func CreateStudent(c *gin.Context) {
-	var aluno models.Student
-	if err := c.ShouldBindJSON(&aluno); err != nil { //ShouldBindJSON get the body of the request format JSON
+	var student models.Student
+	if err := c.ShouldBindJSON(&student); err != nil { //ShouldBindJSON get the body of the request format JSON
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error()})
 		return
 	}
-	database.DB.Create(&aluno)
-	c.JSON(http.StatusOK, aluno)
+	database.DB.Create(&student)
+	c.JSON(http.StatusOK, student)
+}
+func GetStudentById(c *gin.Context) {
+	var student models.Student
+	id := c.Params.ByName("id")     //get the id from the url
+	database.DB.First(&student, id) //search for the first match for the id in the student
+	if student.ID == 0 {            //validate the id
+		c.JSON(http.StatusNotFound, gin.H{
+			"Not found": "Student does not exist"})
+		return
+	}
+
+	c.JSON(http.StatusOK, student) //prints in json the student found
 }

@@ -9,7 +9,7 @@ type Student struct { //struct for Students
 	RG   string `json:"rg"`
 }
 
-var Students []Student //slice of Student
+//var Students []Student //slice of Student
 
 /*
 //gorm.Model in the structure builds a db table with:

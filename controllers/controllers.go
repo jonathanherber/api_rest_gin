@@ -64,3 +64,14 @@ func EditStudentById(c *gin.Context) {
 	database.DB.Model(&student).UpdateColumns(student) //update in the database
 	c.JSON(http.StatusOK, student)                     //print the student
 }
+func GetStudentByCPF(c *gin.Context) {
+	var student models.Student
+	cpf := c.Param("cpf")
+	database.DB.Where(&models.Student{CPF: cpf}).First(&student) //search the first appereance of CPF in the database
+	if student.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Not found": "Student does not exist"})
+		return
+	}
+	c.JSON(http.StatusOK, student)
+}

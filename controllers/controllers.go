@@ -17,7 +17,7 @@ func ShowStudents(c *gin.Context) { //c *gin.Context is a convention
 func Greetings(c *gin.Context) {
 	name := c.Params.ByName("name") //search for the param from the url with gin.Context c by its name
 	c.JSON(200, gin.H{
-		"API: ": "Paramater value " + name,
+		"API:": "Paramater value " + name,
 	})
 }
 func CreateStudent(c *gin.Context) {
